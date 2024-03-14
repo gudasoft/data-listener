@@ -1,0 +1,14 @@
+[Unit]
+Description=Data Listener Server Accept Sockets for CLIENT NAME
+
+[Socket]
+# AF_UNIX domain socket
+# SocketUser, SocketGroup, etc. may be needed for Unix domain sockets
+SocketUser=data-listener
+SocketGroup=data-listener
+ListenStream=/opt/data-listener/sockets/CLIENT.sock
+
+Backlog=8192
+
+[Install]
+WantedBy=sockets.target

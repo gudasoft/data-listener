@@ -1,0 +1,166 @@
+# config.toml
+
+# This is Example Configuration!
+
+# Formating:
+#   %Y - Year
+#   %MO - Month
+#   %D - Day
+#   %H - Hour
+#   %MN - Minute
+#   %S - Second
+#   %MS - Millisecond
+
+
+# Server Configuration
+[server]
+
+  [server.http]
+    enabled=true
+    protocol="http"
+    address = "127.0.0.1"
+    port = 8080
+
+  [server.https]
+    enabled=false
+    protocol="https"
+    address = "127.0.0.1"
+    port = 8444
+    tls_cert = "/path/to/https/cert3.pem"
+    tls_key = "/path/to/https/key3.pem"
+
+
+# Logging Configuration
+[logger]
+  path = "log"
+  file_name = "dev.log"
+  mode = "Development"  # "Disabled" "Development" "Production"
+  printing_logs_to_console = true
+
+
+# Streamer Configuration
+[streamer]
+
+  [[streamer.file]]
+    enabled = false
+    unique_file_per_request = false
+    max_file_size = 55
+    file_path_format = "output/stream/%Y/%MO"
+    file_format = "%Y%MO%D%H%MN%S%MS"
+    item_separator = "\n"
+    file_extansion = "json"
+
+  [[streamer.s3]]
+    enabled = false
+    region = "eu-central-1"
+    bucket = "your-bucket.domain-name.com"
+    prefix_format = "demo/%Y/%MO"
+    key_format = "%Y%MO%D%H%MN%S%MS"
+    obj_type = "json"
+    item_separator = "\n"
+
+  [[streamer.http]]
+    enabled = true
+    protocol = "http"
+    address = "1.1.1.1"
+    port = 8080
+
+  [[streamer.http]]
+    enabled = false
+    protocol = "http"
+    address = "1.1.1.1"
+    port = 8081
+
+  [[streamer.smtp]]
+    enabled = true
+    host = "smtp1.example.com"
+    port = 587
+    username = "smtp_username1"
+    password = "smtp_password1"
+    use_tls = true
+
+  [[streamer.sftp]]
+    enabled = true
+    host = "sftp.example.com"
+    port = 22
+    username = "your_username"
+    password = "your_password"
+    remote_path = "/path/to/remote/directory"
+    local_path = "/path/to/local/directory"
+
+  [[streamer.kafka]]
+    enabled = true
+    bootstrap_servers = ["kafka1.example.com:9092", "kafka2.example.com:9092"]
+    topic = "my_topic"
+
+# Bufferer Configuration
+[bufferer]
+size_megabyte = 5
+convert_to_jsonl = false
+
+  [[bufferer.file]]
+    enabled = true
+    unique_file_per_buffer = false  
+    max_file_size = 100 
+    file_path_format = "output/buffer/%Y/%MO"
+    file_format = "%Y%MO%D%H%MN%S%MS"
+    item_separator = "\n"
+    file_extansion = "jsonl"
+
+  [[bufferer.s3]]
+    enabled = true
+    region = "eu-central-1"
+    bucket = "your-bucket.domain-name.com"
+    prefix_format = "demo/%Y/%MO"
+    key_format = "%Y%MO%D%H%MN%S%MS"
+    obj_type = "jsonl"
+    item_separator = "\n"
+
+
+  [[bufferer.https]]
+    enabled = true
+    address = "127.0.0.1"
+    port = 8443
+    tls_cert = "/path/to/https/cert1.pem"
+    tls_key = "/path/to/https/key1.pem"
+
+  [[bufferer.https]]
+    enabled = true
+    address = "255.155.55.5"
+    port = 5555
+    tls_cert = "/path/to/https/cert2.pem"
+    tls_key = "/path/to/https/key2.pem"
+
+  [[bufferer.https]]
+    enabled = false
+    address = "127.0.0.1"
+    port = 8444
+    tls_cert = "/path/to/https/cert3.pem"
+    tls_key = "/path/to/https/key3.pem"
+
+  [[bufferer.smtp]]
+    enabled = false
+    host = "smtp1.example.com"
+    port = 587
+    username = "smtp_username1"
+    password = "smtp_password1"
+    use_tls = true
+
+  [[bufferer.sftp]]
+    enabled = true
+    host = "sftp.example.com"
+    port = 22
+    username = "your_username"
+    password = "your_password"
+    remote_path = "/path/to/remote/directory"
+    local_path = "/path/to/local/directory"
+
+  [[bufferer.kafka]]
+    enabled = false
+    bootstrap_servers = ["kafka1.example.com:9092", "kafka2.example.com:9092"]
+    topic = "my_topic"
+
+  [[bufferer.kafka]]
+    enabled = true
+    bootstrap_servers = ["kafka3.example.com:9092"]
+    topic = "my_other_topic"

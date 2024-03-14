@@ -1,0 +1,91 @@
+# config.toml
+
+# Formating:
+#   %Y - Year
+#   %MO - Month
+#   %D - Day
+#   %H - Hour
+#   %MN - Minute
+#   %S - Second
+#   %MS - Millisecond
+
+# Application Configuration
+[server]
+
+  [server.http]
+    enabled = true
+    protocol = "http"
+    address = "127.0.0.1"
+    port = 8080
+
+  [server.https]
+    enabled = true
+    protocol ="https"
+    address = "127.0.0.1"
+    port = 8443
+    tls_cert = "https/localhost.crt"
+    tls_key = "https/localhost.key"
+
+  [server.unixsocket]
+    enabled = true
+    protocol = "unix"
+    address = "/tmp/data-listener/data-listener.socket"
+
+  [server.prometheus]
+    enabled = true
+    address = "127.0.0.1"
+    port = 9090
+    path = "/metrics"
+
+
+[logger]
+  path = "log"
+  file_name = "development.log"
+  # mode = "Disabled" "Development" "Production"
+  mode = "Production"
+  printing_logs_to_console = true
+
+
+[streamer]
+
+  [[streamer.file]]
+    enabled = true
+    unique_file_per_request = true
+    max_file_size = 55
+    file_path_format = "output/stream/%Y/%MO"
+    file_format = "%Y%MO%D%H%MN%S%MS"
+    item_separator = "\n"
+    file_extansion = "json"
+
+
+  [[streamer.s3]]
+    enabled = false
+    region = "eu-central-1"
+    bucket = "listener-dm.company.com"
+    prefix_format = "demo/%Y/%MO"
+    key_format = "%Y%MO%D%H%MN%S%MS"
+    obj_type = "json"
+    item_separator = "\n"
+
+
+[bufferer]
+size_megabyte = 5
+convert_to_jsonl = false
+
+  [[bufferer.file]]
+    enabled = false
+    unique_file_per_buffer = false
+    max_file_size = 100
+    file_path_format = "output/buffer/%Y/%MO"
+    file_format = "%Y%MO%D%H%MN%S%MS"
+    item_separator = "\n"
+    file_extansion = "jsonl"
+
+  [[bufferer.s3]]
+    enabled = false
+    region = "eu-central-1"
+    bucket = "listener-dm.company.com"
+    prefix_format = "demo/%Y/%MO"
+    key_format = "%Y%MO%D%H%MN%S%MS"
+    obj_type = "jsonl"
+    item_separator = "\n"
