@@ -1,0 +1,109 @@
+# Formating:
+#   %Y - Year
+#   %MO - Month
+#   %D - Day
+#   %H - Hour
+#   %MN - Minute
+#   %S - Second
+#   %MS - Millisecond
+
+
+# Server Configuration
+[server]
+
+  # HTTPS Server Configuration
+  [server.https]
+    enabled=false              # Enable or disable HTTPS server
+    protocol="https"           # Protocol used (http or https)
+    address = "127.0.0.1"       # IP address to bind
+    port = 8444                 # Port number to listen on
+    tls_cert = "/path/to/https/cert3.pem"  # Path to TLS certificate
+    tls_key = "/path/to/https/key3.pem"    # Path to TLS private key
+
+# Streamer Configuration
+[streamer]
+
+  # HTTP Streamer Configuration
+  [[streamer.http]]
+    enabled = true             # Enable or disable HTTP streaming
+    protocol = "http"          # Protocol used (http or https)
+    address = "1.1.1.1"         # IP address to bind
+    url_path = "/data"          # URL path for streaming
+    port = 8080                 # Port number to listen on
+
+  # HTTPS Streamer Configuration
+  [[streamer.https]]
+    enabled = true             # Enable or disable HTTPS streaming
+    protocol = "https"         # Protocol used (http or https)
+    address = "2.2.2.2"         # IP address to bind
+    url_path = "/data"          # URL path for streaming
+    port = 8080                 # Port number to listen on
+
+  # SMTP Streamer Configuration
+  [[streamer.smtp]]
+    enabled = true             # Enable or disable SMTP streaming
+    host = "smtp1.example.com" # SMTP server host
+    port = 587                  # SMTP server port
+    username = "smtp_username1" # SMTP username
+    password = "smtp_password1" # SMTP password
+    use_tls = true              # Use TLS for secure connection
+
+  # SFTP Streamer Configuration
+  [[streamer.sftp]]
+    enabled = true             # Enable or disable SFTP streaming
+    host = "sftp.example.com"  # SFTP server host
+    port = 22                   # SFTP server port
+    username = "your_username"  # SFTP username
+    password = "your_password"  # SFTP password
+    remote_path = "/path/to/remote/directory"  # Remote directory path
+    local_path = "/path/to/local/directory"    # Local directory path
+
+  # Kafka Streamer Configuration
+  [[streamer.kafka]]
+    enabled = true             # Enable or disable Kafka streaming
+    bootstrap_servers = ["kafka1.example.com:9092", "kafka2.example.com:9092"]  # Kafka bootstrap servers
+    topic = "my_topic"         # Kafka topic
+
+# Bufferer Configuration
+[bufferer]
+
+  # HTTP Bufferer Configuration
+  [[bufferer.http]]
+    enabled = true             # Enable or disable HTTP buffering
+    protocol = "http"          # Protocol used (http or https)
+    address = "1.1.1.1"         # IP address to bind
+    url_path = "/data"          # URL path for buffering
+    port = 8080                 # Port number to listen on
+
+  # HTTPS Bufferer Configuration
+  [[bufferer.https]]
+    enabled = true             # Enable or disable HTTPS buffering
+    protocol = "https"         # Protocol used (http or https)
+    address = "2.2.2.2"         # IP address to bind
+    url_path = "/data"          # URL path for buffering
+    port = 8080                 # Port number to listen on
+
+  # SMTP Bufferer Configuration
+  [[bufferer.smtp]]
+    enabled = false            # Enable or disable SMTP buffering
+    host = "smtp1.example.com" # SMTP server host
+    port = 587                  # SMTP server port
+    username = "smtp_username1" # SMTP username
+    password = "smtp_password1" # SMTP password
+    use_tls = true              # Use TLS for secure connection
+
+  # SFTP Bufferer Configuration
+  [[bufferer.sftp]]
+    enabled = true             # Enable or disable SFTP buffering
+    host = "sftp.example.com"  # SFTP server host
+    port = 22                   # SFTP server port
+    username = "your_username"  # SFTP username
+    password = "your_password"  # SFTP password
+    remote_path = "/path/to/remote/directory"  # Remote directory path
+    local_path = "/path/to/local/directory"    # Local directory path
+
+  # Kafka Bufferer Configuration
+  [[bufferer.kafka]]
+    enabled = false            # Enable or disable Kafka buffering
+    bootstrap_servers = ["kafka1.example.com:9092", "kafka2.example.com:9092"]  # Kafka bootstrap servers
+    topic = "my_topic"         # Kafka topic

@@ -1,0 +1,6 @@
+default:
+  @just --choose
+
+client:
+   go run ./main.go
+

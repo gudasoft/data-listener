@@ -1,0 +1,13 @@
+[Unit]
+Description=Data-Listener Gudasoft Socket
+
+[Socket]
+# AF_UNIX domain socket
+# SocketUser, SocketGroup, etc. may be needed for Unix domain sockets
+SocketUser=dl-development
+SocketGroup=dl-development
+ListenStream=/tmp/data-listener/data-listener.socket
+Backlog=8192
+
+[Install]
+WantedBy=sockets.target

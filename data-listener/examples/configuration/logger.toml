@@ -1,0 +1,6 @@
+# Logging Configuration
+[logger]
+  path = "log"                       # Directory path for log files
+  file_name = "dev.log"              # Log file name
+  mode = "Development"               # Log mode ("Disabled", "Development", "Production")
+  printing_logs_to_console = true    # Enable or disable printing logs to console

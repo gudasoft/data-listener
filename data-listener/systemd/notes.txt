@@ -1,0 +1,60 @@
+# Create a systemd service unit and configure it
+1. sudo nano /etc/systemd/system/data-listener.service
+
+# Create a systemd socket unit file and configure it
+2. sudo nano /etc/systemd/system/data-listener.socket
+
+# Create executable
+3. go build -o data-listener ./cmd/main.go
+3.1 cp https/ data-listener log/ output/ config.toml <desired path> </tmp/data-listener/>
+
+# create system user/group example - data-listener, and give it rights for the executable, root folder, socket folder
+4.1 sudo adduser data-listener
+4.2 sudo addgroup data-listener
+4.3 sudo chown data-listener:data-listener /opt/data-listener/data-listener
+
+
+
+# Reload systemd to pick up the changes
+5. sudo systemctl daemon-reload
+
+# Enable and start the socket and service
+6.1 sudo systemctl enable data-listener.socket
+6.2 sudo systemctl enable data-listener.service
+6.3 sudo systemctl start data-listener.socket
+6.4 sudo systemctl start data-listener.service
+
+# Verify that the services are running
+7.1 sudo systemctl status data-listener.socket
+7.2 sudo systemctl status data-listener.service
+
+
+On 1.
+[Unit]
+Description=Data-Listener Gudasoft
+After=network.target
+Requires=data-listener.socket
+
+[Service]
+Environment=RACK_ENV=development
+User=data-listener
+WorkingDirectory=/opt/data-listener
+ExecStart=//opt/data-listener/data-listener-exec
+
+[Install]
+WantedBy=default.target
+
+On 2.
+[Unit]
+Description=Data-Listener Gudasoft Socket
+
+[Socket]
+# AF_UNIX domain socket
+# SocketUser, SocketGroup, etc. may be needed for Unix domain sockets
+SocketUser=data-listener
+SocketGroup=data-listener
+ListenStream=/tmp/data-listener/data-listener.socket
+Backlog=8192
+
+[Install]
+WantedBy=sockets.target

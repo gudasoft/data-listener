@@ -1,0 +1,40 @@
+# Formating:
+#   %Y - Year
+#   %MO - Month
+#   %D - Day
+#   %H - Hour
+#   %MN - Minute
+#   %S - Second
+#   %MS - Millisecond
+
+  # S3 Streamer Configuration
+[server]
+
+  # HTTP Configuration
+  [server.http]
+    enabled=true               # Enable or disable HTTP server
+    protocol="http"            # Protocol used (http or https)
+    address = "127.0.0.1"       # IP address to bind
+    port = 8080                 # Port number to listen on
+
+[streamer]
+  [[streamer.s3]]
+    enabled = true                              # Enable or disable S3 buffering
+    region = "eu-central-1"                     # AWS region
+    bucket = "your-bucket.domain-name.com"      # S3 bucket name
+    prefix_format = "demo/%Y/%MO"               # Object key prefix format
+    key_format = "%Y%MO%D%H%MN%S%MS"            # Object key format
+    obj_type = "jsonl"                          # Object type
+
+  # S3 Buffered Streamer Configuration
+[bufferer]
+size_megabyte = 5            # Maximum size of the buffer in megabytes
+convert_to_jsonl = false     # Convert buffer items to JSON lines format: true or false
+  [[bufferer.s3]]
+    enabled = true                              # Enable or disable S3 buffering
+    region = "eu-central-1"                     # AWS region
+    bucket = "your-bucket.domain-name.com"      # S3 bucket name
+    prefix_format = "demo/%Y/%MO"               # Object key prefix format
+    key_format = "%Y%MO%D%H%MN%S%MS"            # Object key format
+    obj_type = "jsonl"                          # Object type
+    item_separator = "\n"                       # Separator between items in the object

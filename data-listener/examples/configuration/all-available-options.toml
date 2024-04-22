@@ -1,0 +1,80 @@
+# Formating:
+#   %Y - Year
+#   %MO - Month
+#   %D - Day
+#   %H - Hour
+#   %MN - Minute
+#   %S - Second
+#   %MS - Millisecond
+
+# Server Configuration
+[server]
+
+  # HTTP Configuration
+  [server.http]
+    enabled=true               # Enable or disable HTTP server
+    protocol="http"            # Protocol used (http or https)
+    address = "127.0.0.1"       # IP address to bind, 0.0.0.0 or empty string for all interfaces
+    port = 8080                 # Port number to listen on
+
+  # HTTPS Configuration
+  [server.https]
+    enabled=false                          # Enable or disable HTTPS server
+    protocol="https"                       # Protocol used (http or https)
+    address = "127.0.0.1"                  # IP address to bind
+    port = 8444                            # Port number to listen on
+    tls_cert = "/path/to/https/cert3.pem"  # Path to TLS certificate
+    tls_key = "/path/to/https/key3.pem"    # Path to TLS private key
+
+# Logging Configuration
+[logger]
+  path = "log"                       # Directory path for log files
+  file_name = "dev.log"              # Log file name
+  mode = "Development"               # Log mode ("Disabled", "Development", "Production")
+  printing_logs_to_console = true    # Enable or disable printing logs to console
+
+# Streamer Configuration
+[streamer]
+
+  # File Streamer Configuration
+  [[streamer.file]]
+    enabled = false                             # Enable or disable file streaming
+    file_path_format = "output/stream/%Y/%MO"   # Output file path format
+    file_format = "%Y%MO%D%H%MN%S%MS"           # Output file name format
+    item_separator = "\n"                       # Separator between items in the file
+    file_extansion = "json"                     # File extension
+
+  # S3 Streamer Configuration
+  [[streamer.s3]]
+    enabled = false                             # Enable or disable S3 streaming
+    region = "eu-central-1"                     # AWS region
+    bucket = "your-bucket.domain-name.com"      # S3 bucket name
+    prefix_format = "demo/%Y/%MO"               # Object key prefix format
+    key_format = "%Y%MO%D%H%MN%S%MS"            # Object key format
+    obj_type = "json"                           # Object type
+    item_separator = "\n"                       # Separator between items in the object
+
+# Buffer streamer Configuration
+[bufferer]
+size_megabyte = 5            # Maximum size of the buffer in megabytes
+convert_to_jsonl = false     # Convert buffer items to JSON lines format: true or false
+
+  # File Bufferer Configuration
+  [[bufferer.file]]
+    enabled = false                             # Enable or disable file buffering
+    unique_file_per_buffer = false              # true for unique file per buffer, false to append until size limit
+    max_file_size = 100                         # Maximum file size in megabytes before rotating to a new file, relevant if unique_file_per_buffer is false
+    file_path_format = "output/buffer/%Y/%MO"   # Output file path format
+    file_format = "%Y%MO%D%H%MN%S%MS"           # Output file name format
+    item_separator = "\n"                       # Separator between items in the file
+    file_extansion = "jsonl"                    # File extension
+
+  # S3 Bufferer Configuration
+  [[bufferer.s3]]
+    enabled = true                              # Enable or disable S3 buffering
+    region = "eu-central-1"                     # AWS region
+    bucket = "your-bucket.domain-name.com"      # S3 bucket name
+    prefix_format = "demo/%Y/%MO"               # Object key prefix format
+    key_format = "%Y%MO%D%H%MN%S%MS"            # Object key format
+    obj_type = "jsonl"                          # Object type
+    item_separator = "\n"                       # Separator between items in the object

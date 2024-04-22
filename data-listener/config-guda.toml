@@ -1,0 +1,176 @@
+# config.toml
+
+# Formating:
+#   %Y - Year
+#   %MO - Month
+#   %D - Day
+#   %H - Hour
+#   %MN - Minute
+#   %S - Second
+#   %MS - Millisecond
+
+# Application Configuration
+[server]
+
+  [[server.parameters]]
+    enabled = true
+    name = "data-listener"
+    concurrency = 10
+    read_buffer_size_kilobyte = 1024
+    write_buffer_size_kilobyte = 1024
+    write_timeout_seconds = 10
+    idle_timeout_seconds = 60
+    max_conns_per_ip = 10
+    max_requests_per_conn = 10000
+    max_keep_alive_duration_seconds = 600
+    max_request_body_size_kilobyte = 1024
+    disable_keep_alive = false
+    tcp_keep_alive = false
+    reduce_memory_usage = false
+    get_only = false
+    disable_pre_parse_multipart_form = false
+    log_all_errors = false
+    secure_error_log_message = false
+    disable_header_names_normalizing = false
+    sleep_when_concurrency_limits_exceeded_seconds = 15
+    no_default_server_header = false
+    no_default_date = false
+    no_default_content_type = false
+    keep_hijacked_conns = false
+    close_on_shutdown = false
+    stream_request_body = false
+
+  [[server.http]]
+    enabled = false
+    protocol = "http"
+    address = ""
+    port = 8080
+
+  [[server.https]]
+    enabled = true
+    protocol ="https"
+    address = "127.0.0.1"
+    port = 10443
+    server_tls_certificate = "https/mtls/server-certificate.pem"
+    server_tls_key = "https/mtls/server-private-key.pem"
+    use_mtls = true
+    ca_tls_cert = "https/mtls/ca-certificate.pem"
+
+
+  [[server.unixsocket]]
+    enabled = false
+    protocol = "unix"
+    address = "/tmp/data-listener/data-listener.socket"
+
+  [[server.prometheus]]
+    enabled = true
+    address = "127.0.0.1"
+    port = 9090
+    path = "/metrics"
+
+[validation]
+
+  [[validation.json]]
+    enabled = false
+
+  [[validation.whitelist]]
+    enabled = false
+    networks = ["1.1.1.1/32", "8.8.8.8/16"] #"1.1.1.1/32", "8.8.8.8/16", "127.0.0.1/24"
+    # check dictionary section -- description of ip/ip  //// if 192.168.0.1/32 allows 1 ip /// 192.168.0.1/16 allows many  ip's
+
+[logger]
+  path = "log"
+  file_name = "development.log"
+  # mode = "Disabled" "Development" "Production"
+  mode = "Production"
+  printing_logs_to_console = true
+
+
+[streamer]
+
+  [[streamer.http]] # TODO write how it works
+    enabled = false
+    protocol = "http"
+    address = "127.0.0.1"
+    port = 1441
+    endpoint = "/data"
+    content_type = "application/json"
+
+  [[streamer.https]]
+    enabled = false
+    protocol = "https"
+    address = "127.0.0.1"
+    port = 10443
+    endpoint = "/data"
+    content_type = "application/json"
+    use_mtls = true                             # Enable mutual TLS authentication
+    client_tls_cert = "https/mtls/client-certificate.pem"  # Local HTTP client certificate
+    client_tls_key = "https/mtls/client-private-key.pem"    # Local HTTP client private key
+    ca_tls_cert = "https/mtls/ca-certificate.pem"  # Certificate Authority's public certificate
+    skip_host_name_verification = true         # Skip server hostname verification
+
+  [[streamer.file]]
+    enabled = true
+    unique_file_per_request = false
+    max_file_size_kilobyte = 5500
+    file_path_format = "output/stream/%Y/%MO"
+    file_format = "%Y%MO%D%H%MN%S%MS"
+    file_extansion = "jsonl"
+    item_separator = "\n"
+
+
+  [[streamer.s3]]
+    enabled = false
+    region = "eu-central-1"
+    bucket = "listener-dm.example.com"
+    prefix_format = "demo/%Y/%MO"
+    key_format = "%Y%MO%D%H%MN%S%MS"
+    obj_type = "json"
+    item_separator = "\n"
+
+
+[bufferer]
+size_kilobyte = 5000
+convert_to_jsonl = false
+
+  [[bufferer.http]]
+    enabled = false
+    protocol = "http"
+    address = "127.0.0.1"
+    port = 1441
+    endpoint = "/data"
+    content_type = "application/json"
+    item_separator = "\n"
+
+  [[bufferer.https]]
+    enabled = false
+    protocol ="https"
+    address = "127.0.0.1"
+    port = 8444
+    endpoint = "/data"
+    content_type = "application/json"
+    item_separator = "\n"
+    use_mtls = true                              # Enable mutual TLS authentication
+    client_tls_cert = "https/mtls/client-certificate.pem"  # Local HTTP client certificate
+    client_tls_key = "https/mtls/client-private-key.pem"    # Local HTTP client private key
+    ca_tls_cert = "https/mtls/ca-certificate.pem"  # Certificate Authority's public certificate
+    skip_host_name_verification = true         # Skip server hostname verification
+
+
+  [[bufferer.file]]
+    enabled = true
+    unique_file_per_buffer = true
+    max_file_size_kilobyte = 20000
+    file_path_format = "output/buffer/%Y/%MO"
+    file_format = "%Y%MO%D%H%MN%S%MS"
+    file_extansion = "jsonl"
+    item_separator = "\n"
+
+  [[bufferer.s3]]
+    enabled = false
+    region = "eu-central-1"
+    bucket = "listener-dm.example.com"
+    prefix_format = "demo/%Y/%MO"
+    key_format = "%Y%MO%D%H%MN%S%MS"
+    obj_type = "jsonl"
+    item_separator = "\n"

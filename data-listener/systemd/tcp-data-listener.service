@@ -1,0 +1,12 @@
+[Unit]
+Description=Data Listener for ClientX
+After=network.target
+
+[Service]
+User=data-listener
+WorkingDirectory=/opt/data-listener/data-listener
+ExecStart=/opt/data-listener/data-listener
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,31 @@
+# Formating:
+#   %Y - Year
+#   %MO - Month
+#   %D - Day
+#   %H - Hour
+#   %MN - Minute
+#   %S - Second
+#   %MS - Millisecond
+
+# File Streamer Configuration
+[streamer]
+  [[streamer.file]]
+    enabled = false                             # Enable or disable file streaming
+    unique_file_per_request = false             # true for unique file per request, false to append until size limit
+    max_file_size = 55                          # Maximum file size in megabytes before rotating to a new file, relevant if unique_file_per_request is false
+    file_path_format = "output/stream/%Y/%MO"   # Output file path format
+    file_format = "%Y%MO%D%H%MN%S%MS"           # Output file name format
+    file_extansion = "json"                     # File extension
+
+# File Bufferer Configuration
+[bufferer]
+size_megabyte = 5            # Maximum size of the buffer in megabytes
+convert_to_jsonl = false     # Convert buffer items to JSON lines format: true or false
+  [[bufferer.file]]
+    enabled = false                             # Enable or disable file buffering
+    unique_file_per_buffer = false              # true for unique file per buffer, false to append until size limit
+    max_file_size = 100                         # Maximum file size in megabytes before rotating to a new file, relevant if unique_file_per_buffer is false
+    file_path_format = "output/buffer/%Y/%MO"   # Output file path format
+    file_format = "%Y%MO%D%H%MN%S%MS"           # Output file name format
+    item_separator = "\n"                       # Separator between items in the file
+    file_extansion = "jsonl"                    # File extension

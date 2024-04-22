@@ -1,0 +1,30 @@
+
+[streamer]
+
+  [[streamer.https]] 
+    enabled = true
+    protocol = "https"
+    address = "127.0.0.1"
+    port = 8444
+    endpoint = "/data"
+    use_mtls = true                              # Enable mutual TLS authentication
+    client_tls_cert = "/path/to/https/cert3.pem"  # Local HTTP client certificate
+    client_tls_key = "/path/to/https/key3.pem"    # Local HTTP client private key
+    server_tls_cert = "/path/to/server/cert.pem"  # Server's public certificate
+
+[bufferer]
+size_kilobyte = 5000
+convert_to_jsonl = false
+
+  [[bufferer.https]]
+    enabled = false
+    protocol ="https"
+    address = "127.0.0.1"
+    port = 8444
+    endpoint = "/data"
+    content_type = "application/json"
+    item_separator = "\n"
+    use_mtls = true                              # Enable mutual TLS authentication
+    client_tls_cert = "/path/to/https/cert3.pem"  # Local HTTP client certificate
+    client_tls_key = "/path/to/https/key3.pem"    # Local HTTP client private key
+    server_tls_cert = "/path/to/server/cert.pem"  # Server's public certificate

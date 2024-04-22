@@ -1,0 +1,24 @@
+
+
+[streamer]
+
+  [[streamer.http]] # TODO write how it works
+    enabled = false
+    protocol = "http"
+    address = "127.0.0.1"
+    port = 1441
+    endpoint = "/data"
+    content_type = "application/json"
+
+[bufferer]
+size_kilobyte = 5000
+convert_to_jsonl = false
+
+  [[bufferer.http]]
+    enabled = false
+    protocol = "http"
+    address = "127.0.0.1"
+    port = 1441
+    endpoint = "/data"
+    content_type = "application/json"
+    item_separator = "\n"
