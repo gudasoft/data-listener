@@ -1,0 +1,62 @@
+name: GoLang CI
+
+on:
+  push:
+    branches:
+      - ci-pipeline
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up and cache Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.20.5'
+          cache-dependency-path: |
+            data-listener/go.sum
+
+      - name: Install dependencies
+        run: |
+          cd data-listener
+          go mod tidy
+          go mod download 
+
+      - name: Run tests
+        run: |
+          cd data-listener
+          go test -v ./...
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    if: ${{ needs.test.result == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up and cache Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.20.5'
+          cache-dependency-path: |
+            data-listener/go.sum
+
+      - name: Build and Zip Binaries
+        run: |
+          cd data-listener
+          GOOS=linux GOARCH=amd64 go build -o data_listener_linux_amd64 ./src/cmd/main.go
+          zip data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip data_listener_linux-amd64 ../README.md config.toml examples
+          
+          GOOS=darwin GOARCH=amd64 go build -o data_listener_darwin_amd64 ./src/cmd/main.go
+          zip data_listener_${GITHUB_REF_NAME#v}_darwin_amd64.zip data_listener_darwin_amd64 ../README.md config.toml examples
+          
+          GOOS=windows GOARCH=amd64 go build -o data_listener_windows_amd64.exe ./src/cmd/main.go
+          zip data_listener_${GITHUB_REF_NAME#v}_windows_amd64.zip data_listener_windows_amd64.exe ../README.md config.toml examples  
+
+#  release:
