@@ -95,7 +95,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: data-listener/data_listener_${{ github.ref_name#v }}_linux_amd64.zip
-          asset_name: data_listener_${{ github.ref_name#v }}_linux_amd64.zip
+          asset_path: data-listener/data_listener_${{ github.ref_name }}_linux_amd64.zip
+          asset_name: data_listener_${{ github.ref_name }}_linux_amd64.zip
           asset_content_type: application/zip
 
