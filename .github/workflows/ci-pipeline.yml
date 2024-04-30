@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - ci-pipeline
+    tags:
+      - 'v*'
 
 jobs:
   test:
