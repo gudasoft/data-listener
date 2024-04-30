@@ -83,7 +83,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.github.even.ref }}
+          tag_name: ${{ steps.github.event.ref }}
           release_name: Release ${{ github.event.ref }}
           body: |
             Release notes for version ${{ github.event.ref }}
