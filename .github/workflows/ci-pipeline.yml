@@ -59,8 +59,14 @@ jobs:
           
           GOOS=windows GOARCH=amd64 go build -o data_listener_windows_amd64.exe ./src/cmd/main.go
           zip data_listener_${GITHUB_REF_NAME#v}_windows_amd64.zip data_listener_windows_amd64.exe ../README.md config.toml examples
+
+          echo "Listing directory contents and searching for files..."
           pwd
           ls -la
+          echo "Searching for built binary..."
+          find / -name "data_listener_linux_amd64" 2>/dev/null
+          echo "Searching for zipped file..."
+          find / -name "data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip" 2>/dev/null
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -81,7 +87,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: linux-binaries
-          path: /home/runner/work/data-listener/data-listener/data-listener
+          path: data-listener
 
       - name: Create Release
         id: create_release
