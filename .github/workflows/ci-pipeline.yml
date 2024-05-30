@@ -2,13 +2,11 @@ name: Release
  
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    tags: ['v*.*.*']
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ needs.test.result == 'success' }}
 
     steps:
       - name: Checkout code
