@@ -64,9 +64,9 @@ jobs:
           pwd
           ls -la
           echo "Searching for built binary..."
-          find /data-listener -name "data_listener_linux_amd64" 2>/dev/null
+          find ./ -name "data_listener_linux_amd64" 2>/dev/null
           echo "Searching for zipped file..."
-          find /data-listener -name "data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip" 2>/dev/null
+          find ./ -name "data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip" 2>/dev/null
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
