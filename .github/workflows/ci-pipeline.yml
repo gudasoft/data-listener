@@ -81,7 +81,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: linux-binaries
-          path: data-listener
+          path: /home/runner/work/data-listener/data-listener/data-listener
 
       - name: Create Release
         id: create_release
