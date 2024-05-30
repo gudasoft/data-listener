@@ -80,6 +80,10 @@ jobs:
     if: github.event.ref_type == 'tag' && ${{ needs.build.result == 'success' }}
 
     steps:
+      - name: Show env
+        run: |
+          env
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -107,6 +111,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: data-listener/data_listener_linux_amd64.zip
