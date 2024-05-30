@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - ci-pipeline
-    tags:
-      - 'v*'
+    tags: ["v*.*.*"]
 
 jobs:
   test:
@@ -53,13 +52,15 @@ jobs:
         run: |
           cd data-listener
           GOOS=linux GOARCH=amd64 go build -o data_listener_linux_amd64 ./src/cmd/main.go
-          zip data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip data_listener_linux-amd64 ../README.md config.toml examples
+          zip data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip data_listener_linux_amd64 ../README.md config.toml examples
           
           GOOS=darwin GOARCH=amd64 go build -o data_listener_darwin_amd64 ./src/cmd/main.go
           zip data_listener_${GITHUB_REF_NAME#v}_darwin_amd64.zip data_listener_darwin_amd64 ../README.md config.toml examples
           
           GOOS=windows GOARCH=amd64 go build -o data_listener_windows_amd64.exe ./src/cmd/main.go
-          zip data_listener_${GITHUB_REF_NAME#v}_windows_amd64.zip data_listener_windows_amd64.exe ../README.md config.toml examples  
+          zip data_listener_${GITHUB_REF_NAME#v}_windows_amd64.zip data_listener_windows_amd64.exe ../README.md config.toml examples
+          pwd
+          ls -la
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
