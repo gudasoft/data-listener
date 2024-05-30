@@ -52,13 +52,13 @@ jobs:
         run: |
           cd data-listener
           GOOS=linux GOARCH=amd64 go build -o data_listener_linux_amd64 ./src/cmd/main.go
-          zip data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip data_listener_linux_amd64 ../README.md config.toml examples
+          zip data_listener_linux_amd64.zip data_listener_linux_amd64 ../README.md config.toml examples
           
           GOOS=darwin GOARCH=amd64 go build -o data_listener_darwin_amd64 ./src/cmd/main.go
-          zip data_listener_${GITHUB_REF_NAME#v}_darwin_amd64.zip data_listener_darwin_amd64 ../README.md config.toml examples
+          zip data_listener_darwin_amd64.zip data_listener_darwin_amd64 ../README.md config.toml examples
           
           GOOS=windows GOARCH=amd64 go build -o data_listener_windows_amd64.exe ./src/cmd/main.go
-          zip data_listener_${GITHUB_REF_NAME#v}_windows_amd64.zip data_listener_windows_amd64.exe ../README.md config.toml examples
+          zip data_listener_windows_amd64.exe.zip data_listener_windows_amd64.exe ../README.md config.toml examples
 
           echo "Listing directory contents and searching for files..."
           pwd
@@ -66,13 +66,13 @@ jobs:
           echo "Searching for built binary..."
           find ./ -name "data_listener_linux_amd64" 2>/dev/null
           echo "Searching for zipped file..."
-          find ./ -name "data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip" 2>/dev/null
+          find ./ -name "data_listener_linux_amd64.zip" 2>/dev/null
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: linux-binaries
-          path: data-listener/data_listener_${GITHUB_REF_NAME#v}_linux_amd64.zip
+          path: data-listener/data_listener_linux_amd64.zip
 
   release:
     runs-on: ubuntu-latest
