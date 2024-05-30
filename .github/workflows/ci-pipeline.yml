@@ -52,27 +52,22 @@ jobs:
         run: |
           cd data-listener
           GOOS=linux GOARCH=amd64 go build -o data_listener_linux_amd64 ./src/cmd/main.go
-          zip data_listener_linux_amd64.zip data_listener_linux_amd64 ../README.md config.toml examples
+          tar czf data_listener_linux_amd64.tar.gz data_listener_linux_amd64 ../README.md config.toml examples
           
           GOOS=darwin GOARCH=amd64 go build -o data_listener_darwin_amd64 ./src/cmd/main.go
-          zip data_listener_darwin_amd64.zip data_listener_darwin_amd64 ../README.md config.toml examples
+          tar czf data_listener_darwin_amd64.tar.gz data_listener_darwin_amd64 ../README.md config.toml examples
           
           GOOS=windows GOARCH=amd64 go build -o data_listener_windows_amd64.exe ./src/cmd/main.go
-          zip data_listener_windows_amd64.exe.zip data_listener_windows_amd64.exe ../README.md config.toml examples
+          zip data_listener_windows_amd64.zip data_listener_windows_amd64.exe ../README.md config.toml examples
 
-          echo "Listing directory contents and searching for files..."
-          pwd
-          ls -la
-          echo "Searching for built binary..."
-          find ./ -name "data_listener_linux_amd64" 2>/dev/null
-          echo "Searching for zipped file..."
-          find ./ -name "data_listener_linux_amd64.zip" 2>/dev/null
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+      - name: Upload All Binaries
+        uses: actions/upload-artifact@v4
         with:
-          name: linux-binaries
-          path: data-listener/data_listener_linux_amd64.zip
+          name: all-binaries
+          path: |
+            data-listener/data_listener_linux_amd64.tar.gz
+            data-listener/data_listener_darwin_amd64.tar.gz
+            data-listener/data_listener_windows_amd64.zip
 
   release:
     runs-on: ubuntu-latest
@@ -80,17 +75,13 @@ jobs:
     if: github.event.ref_type == 'tag' && ${{ needs.build.result == 'success' }}
 
     steps:
-      - name: Show env
-        run: |
-          env
-
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
+      - name: Download All Binaries
+        uses: actions/download-artifact@v4
         with:
-          name: linux-binaries
+          name: all-binaries
           path: data-listener
 
       - name: Create Release
@@ -106,15 +97,33 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Linux Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: data-listener/data_listener_linux_amd64.zip
-          asset_name: data_listener_linux_amd64-${{ github.ref_name }}.zip
+          asset_path: data-listener/data_listener_linux_amd64.tar.gz
+          asset_name: data_listener_linux_amd64-${{ github.ref_name }}.tar.gz
+          asset_content_type: application/zip
+
+      - name: Upload Darwin Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: data-listener/data_listener_darwin_amd64.tar.gz
+          asset_name: data_listener_darwin_amd64-${{ github.ref_name }}.tar.gz
+          asset_content_type: application/zip
+
+      - name: Upload Windows Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: data-listener/data_listener_windows_amd64.zip
+          asset_name: data_listener_windows_amd64-${{ github.ref_name }}.zip
           asset_content_type: application/zip
 
